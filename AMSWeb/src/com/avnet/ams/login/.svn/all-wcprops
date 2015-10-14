@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/ACE2014/!svn/ver/2308/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/login
+END
+LoginServlet.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/ACE2014/!svn/ver/2502/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/login/LoginServlet.java
+END
+LogoutServlet.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/ACE2014/!svn/ver/2308/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/login/LogoutServlet.java
+END

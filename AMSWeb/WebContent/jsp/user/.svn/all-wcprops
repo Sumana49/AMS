@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 94
+/svn/ACE2014/!svn/ver/3077/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/user
+END
+header_secure.jspf
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/ACE2014/!svn/ver/3108/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/user/header_secure.jspf
+END
+assetRequest.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/ACE2014/!svn/ver/3250/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/user/assetRequest.jsp
+END
+help.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/ACE2014/!svn/ver/2312/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/user/help.jsp
+END
+header_non-secure.jspf
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/ACE2014/!svn/ver/2110/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/user/header_non-secure.jspf
+END
+assetHistory.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/ACE2014/!svn/ver/3277/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/user/assetHistory.jsp
+END

@@ -1,0 +1,1771 @@
+package com.avnet.ams.delegate;
+
+import java.text.MessageFormat;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map.Entry;
+import java.util.logging.Logger;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.XMLGregorianCalendar;
+import javax.xml.ws.soap.SOAPFaultException;
+
+import com.avnet.ams.constants.AMSAdminConstants;
+import com.avnet.ams.constants.LoggerConstants;
+import com.avnet.ams.util.AMSDateUtil;
+import com.avnet.ams.util.AMSJsonUtil;
+import com.avnet.ams.util.AMSNameUtil;
+import com.avnet.ams.util.AcknowledgementJsonUtil;
+import com.avnet.ams.vto.AddAssetVTO;
+import com.avnet.ams.vto.AssetTypeAdaptor;
+import com.avnet.ams.vto.AssetTypeVTO;
+import com.avnet.ams.vto.AssetTypeList;
+import com.avnet.ams.vto.AssetsHistoryCountVTO;
+import com.avnet.ams.vto.AssetsHistoryVTO;
+import com.avnet.ams.vto.AttributeType;
+import com.avnet.ams.vto.AttributesList;
+import com.avnet.ams.vto.AvailableAssetVTO;
+import com.avnet.ams.vto.EditAssetVTO;
+import com.avnet.ams.vto.EmployeeDetailsClientVTO;
+import com.avnet.ams.vto.EmployeeDetailsListVTO;
+import com.avnet.ams.vto.EmployeeDetailsOwnedby;
+
+import com.avnet.ams.vto.ResolveVTO;
+import com.avnet.ams.vto.ViewAssetsCountVTO;
+import com.avnet.ams.vto.ViewAssetsAdminVTO;
+import com.avnet.ams.vto.ViewReportVTO;
+import com.avnet.ams.vto.ViewRequestCountVTO;
+import com.avnet.ams.vto.ViewRequestsVTO;
+import com.avnet.assetportal.webservice.assetservice.Asset;
+import com.avnet.assetportal.webservice.assetservice.AssetList;
+import com.avnet.assetportal.webservice.assetservice.AssetManagerServicePortProxy;
+import com.avnet.assetportal.webservice.assetservice.AssetPortalWSException;
+import com.avnet.assetportal.webservice.assetservice.AssetStatusEnum;
+import com.avnet.assetportal.webservice.assetservice.AssetType;
+import com.avnet.assetportal.webservice.assetservice.Employee;
+import com.avnet.assetportal.webservice.assetservice.SearchTypeEnum;
+import com.avnet.assetportal.webservice.assetservice.SortColumnEnum;
+import com.avnet.assetportal.webservice.common.Acknowledgement;
+import com.avnet.assetportal.webservice.common.Attribute;
+import com.avnet.assetportal.webservice.common.SortOrderEnum;
+import com.avnet.assetportal.webservice.reportmanager.AssetDetails;
+import com.avnet.assetportal.webservice.reportmanager.AssetReport;
+import com.avnet.assetportal.webservice.reportmanager.ReportManagerPortProxy;
+import com.avnet.assetportal.webservice.reportmanager.ReportResults;
+import com.avnet.assetportal.webservice.reportmanager.ReportResultsList;
+import com.avnet.assetportal.webservice.reportmanager.ReportType;
+import com.avnet.assetportal.webservice.request.EmployeeRequestDetails;
+import com.avnet.assetportal.webservice.request.GetAssetResponse;
+import com.avnet.assetportal.webservice.request.RecentActivityDetails;
+import com.avnet.assetportal.webservice.request.RequestManagerPortProxy;
+import com.avnet.assetportal.webservice.request.RequestOperationEnum;
+import com.avnet.assetportal.webservice.request.RequestSortTypeEnum;
+import com.avnet.assetportal.webservice.request.UpdateRequestDetails;
+import com.avnet.assetportal.webservice.usermanager.EmployeeDetails;
+import com.avnet.assetportal.webservice.usermanager.EmployeeIds;
+import com.avnet.assetportal.webservice.usermanager.UserManagerPortProxy;
+import com.ibm.json.java.JSONArray;
+import com.ibm.json.java.JSONObject;
+import com.ibm.ws.objectManager.ObjectManagerException;
+
+/**
+ * @author Dinesh
+ */
+public class AMSAdminDelegate {
+	private static final String CLASS_NAME = AMSAdminDelegate.class.getName();
+	private static Logger logger = Logger.getLogger(CLASS_NAME);
+
+	/**
+	 * @author Aditya
+	 * @param webServiceAccess
+	 * @return
+	 * @throws AssetPortalWSException
+	 *             returns all the attributes
+	 */
+
+	public static JSONObject getAttributesListJson(
+			AssetManagerServicePortProxy webServiceAccess){
+		final String METHOD_NAME = "getAttributesListJson";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		// getting values from service
+
+		AttributesList attributesListObject = new AttributesList();
+
+		ArrayList<String> tempAttr = new ArrayList<String>();
+		ArrayList<String> tempId = new ArrayList<String>();
+		List<Attribute> allAttr = null;
+		try {
+			allAttr = webServiceAccess.getAttributes("");
+		} catch (AssetPortalWSException e) {
+			//FIXME
+		}
+		for (int i = 0; i < allAttr.size(); i++) {
+			tempAttr.add(allAttr.get(i).getName());
+			tempId.add(allAttr.get(i).getId());
+		}
+		String[] inputNameArray = tempAttr.toArray(new String[tempAttr.size()]);
+		String[] inputIdArray = tempId.toArray(new String[tempId.size()]);
+		attributesListObject.setAttributeName(inputNameArray);
+		attributesListObject.setAttributeId(inputIdArray);
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToAttributesJson(attributesListObject);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+
+	}
+
+	public static String callServiceToUpdateUser(
+			AssetManagerServicePortProxy webServiceAccess, String assetId,
+			String empId) {
+
+		String[] assetIdArray = assetId.split(",");
+		List<Integer> listAssetId = new ArrayList<Integer>();
+
+		for (int i = 0; i < assetIdArray.length; i++) {
+			listAssetId.add(Integer.parseInt(assetIdArray[i]));
+		}
+		try {
+			Acknowledgement acknowledgement = webServiceAccess.removeAsset(
+					listAssetId, Integer.parseInt(empId));
+			return acknowledgement.getMessage();
+		} catch (Exception e) {
+			return "Remove asset failed";
+		}
+	}
+
+	/**
+	 * 
+	 * @return a list of requests from the WS to the view request UI
+	 * @throws AssetPortalWSException
+	 * @throws ObjectManagerException
+	 */
+
+	public static JSONObject getAssetTypeListJson(
+			AssetManagerServicePortProxy webServiceAccess) {
+		final String METHOD_NAME = "getAssetTypeListJson";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		// getting values from service
+
+		ArrayList<AssetTypeVTO> assetTypeAdminVTOList = new ArrayList<AssetTypeVTO>();
+
+		List<AssetType> assetTypeFromWS = null;
+		try {
+			assetTypeFromWS = webServiceAccess.getAssetType();
+		} catch (AssetPortalWSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		Iterator<AssetType> iterator = assetTypeFromWS.iterator();
+		AssetType assetType = null;
+		while (iterator.hasNext()) {
+			assetType = new AssetType();
+			assetType = iterator.next();
+			AssetTypeVTO asset = new AssetTypeVTO();
+			asset.setName(assetType.getAssetTypeName());
+			asset.setId(assetType.getAssetTypeId());
+
+			Iterator<Attribute> iter = null;
+			try {
+				iter = webServiceAccess.getAttributes(
+						"" + assetType.getAssetTypeId()).iterator();
+			} catch (AssetPortalWSException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			ArrayList<String> attrArray = new ArrayList<String>();
+			ArrayList<String> attrArrayId = new ArrayList<String>();
+			while (iter.hasNext()) {
+				Attribute attr = iter.next();
+				attrArray.add(attr.getName());
+				attrArrayId.add(attr.getId());
+			}
+			String farray[] = new String[attrArray.size()];
+			for (int j = 0; j < attrArray.size(); j++) {
+				farray[j] = attrArray.get(j);
+			}
+			String idarray[] = new String[attrArrayId.size()];
+			for (int j = 0; j < attrArrayId.size(); j++) {
+				idarray[j] = attrArrayId.get(j);
+			}
+
+			asset.setFields(AMSNameUtil.convertToVariableName(farray));
+			asset.setLabels(AMSNameUtil.convertToLabelName(asset.getFields()));
+			asset.setAssetId(idarray);
+			assetTypeAdminVTOList.add(asset);
+		}
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToTypeJson(assetTypeAdminVTOList);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+
+	}
+
+	/**
+	 * 
+	 * @return get values obtained from web service for View Requests page and
+	 *         converting to JSON
+	 * @throws DatatypeConfigurationException
+	 * @throws ParseException
+	 * @throws com.avnet.assetportal.webservice.request.AssetPortalWSException
+	 */
+	public static JSONObject getViewRequestsJson(
+			RequestManagerPortProxy webServiceRequestAccess, String fromDate,
+			String toDate, String min, String max, String sortType,
+			String sortMode) {
+		final String METHOD_NAME = "getViewRequestsJson";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		fromDate = fromDate.split(",")[0];
+		toDate = toDate.split(",")[0];
+		XMLGregorianCalendar fromDateFormatted = null;
+		XMLGregorianCalendar toDateFormatted = null;
+		min=Integer.toString(Integer.parseInt(min)+1);
+		max=Integer.toString((Integer.parseInt(min))+ (Integer.parseInt(max))-1);
+		
+		try {
+			if (!fromDate.isEmpty()) {
+				fromDateFormatted = AMSDateUtil
+						.toXMLGregorianCalendar(fromDate);
+			}
+			if (!toDate.isEmpty()) {
+				toDateFormatted = AMSDateUtil.toXMLGregorianCalendar(toDate);
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (DatatypeConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		ArrayList<ViewRequestsVTO> viewRequestsTempList = new ArrayList<ViewRequestsVTO>();
+
+		GetAssetResponse getAssetResponse = null;
+		try {
+
+			getAssetResponse = webServiceRequestAccess
+					.getAssetRequests(
+							fromDateFormatted,
+							toDateFormatted,
+							Integer.parseInt(min),
+							Integer.parseInt(max),
+							RequestSortTypeEnum
+									.valueOf(AMSAdminConstants.REQUESTS_SORT_COLUMN[(Integer
+											.parseInt(sortType)) - 1]),
+							SortOrderEnum.valueOf(sortMode.toUpperCase()));
+		} catch (com.avnet.assetportal.webservice.request.AssetPortalWSException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		List<EmployeeRequestDetails> recentAssetRequest = getAssetResponse
+				.getEmployeeRequestDetails();
+		ViewRequestCountVTO viewRequestCountVTO = new ViewRequestCountVTO();
+		viewRequestCountVTO.setRecordsFiltered(getAssetResponse
+				.getMaxRowCount());
+		if (viewRequestCountVTO.getRecordsFiltered() > 0) {
+			Iterator<EmployeeRequestDetails> iter = recentAssetRequest
+					.iterator();
+			EmployeeRequestDetails empReqDet = null;
+
+			while (iter.hasNext()) {
+				empReqDet = iter.next();
+				ViewRequestsVTO assetReq = new ViewRequestsVTO();
+				assetReq.setEmployeeID(empReqDet.getAssetDetails().getEmpId());
+				assetReq.setType(empReqDet.getAssetDetails().getAssetType());
+				assetReq.setName(empReqDet.getAssetDetails().getEmpname());
+				assetReq.setStatus(empReqDet.getAssetDetails().getStatus());
+				assetReq.setRequestID(empReqDet.getEmployeeDetails()
+						.getRequestId());
+				assetReq.setSeverity(empReqDet.getEmployeeDetails()
+						.getSeverity());
+				if(empReqDet.getAssetDetails().getNote()==null){
+					assetReq.setPurpose("-");
+				}
+				else{
+					assetReq.setPurpose(empReqDet.getAssetDetails().getNote());	
+				}
+				if(empReqDet.getEmployeeDetails().getAdminNote()==null)
+				{
+					assetReq.setComments("Nil");
+				}
+				else{
+					assetReq.setComments(empReqDet.getEmployeeDetails().getAdminNote());
+				}
+				if(empReqDet.getEmployeeDetails().getDueDate()==null){
+					assetReq.setDueDate("-");
+				}
+				else{
+					assetReq.setDueDate(empReqDet.getEmployeeDetails().getDueDate()
+						.toString());
+				}
+				if(empReqDet.getEmployeeDetails().getDateOfIssue()==null){
+					assetReq.setDateOfIssue("-");
+				}
+				else{
+					assetReq.setDateOfIssue(empReqDet.getEmployeeDetails()
+							.getDateOfIssue().toString());
+				}
+				
+				try {
+					assetReq.setDateOfApproval(empReqDet.getEmployeeDetails()
+							.getDateOfApproval().toString());
+
+				} catch (Exception e) {
+					assetReq.setDateOfApproval("-");
+				}
+				viewRequestsTempList.add(assetReq);
+			}
+		} else {
+			viewRequestsTempList.add(new ViewRequestsVTO("-", "-", "-", "-",
+					"-", "-", "-", "-", "-", "-", "-","-","-"));
+			viewRequestCountVTO
+					.setViewRequestsAdminVTOList(viewRequestsTempList);
+		}
+
+		viewRequestCountVTO.setViewRequestsAdminVTOList(viewRequestsTempList);
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToRequestsJson(viewRequestCountVTO);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+
+	}
+
+	/**
+	 * public static JSONObject getEmpDetailsAutoCompleteJson() {
+	 * ArrayList<EmpAutoCompleteDetails> empDetilsAdminVTOList =
+	 * DummyClassGetValues .getValuesForEmpAutoCompleteList();
+	 * 
+	 * JSONObject jsonObject = AMSJsonUtil
+	 * .convertToEmpDetailsAutoCompleteJson(empDetilsAdminVTOList);
+	 * 
+	 * return jsonObject;
+	 * 
+	 * }
+	 **/
+
+	/**
+	 * get values from WS and populate the Edit Asset VTO
+	 * 
+	 * @param asset
+	 *            ID from web page
+	 * @return the Values to controller for Edit Asset UI page
+	 * @throws ObjectManagerException
+	 */
+	public static EditAssetVTO getEditAssetValuesFromService(
+			AssetManagerServicePortProxy webServiceAccess, String assetId) {
+		final String METHOD_NAME = "getEditAssetValuesFromService";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		EditAssetVTO editAssetAdminVTOObject = new EditAssetVTO();
+		Asset asset = null;
+		try {
+			// Calling WS to get Asset Details
+			asset = webServiceAccess.getAssetDetails(assetId);
+		} catch (AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW081E"),
+					e.getMessage()));
+			return null;
+		}
+		// Setting values for VTO Object
+		// setting asset ID and Identity
+		editAssetAdminVTOObject.setAssetIdentity(asset.getAssetIdentity());
+		editAssetAdminVTOObject.setAssetId(asset.getAssetId());
+		// setting asset name
+		editAssetAdminVTOObject.setAssetType(asset.getAssetType()
+				.getAssetTypeName());
+		// setting owner name
+		editAssetAdminVTOObject.setOwnedBy(asset.getOwner().getEmpFirstName()
+				+ " " + asset.getOwner().getEmpLastName());
+
+		// setting ifCarryOut available
+		if (asset.getAssetType().getInHouseFlag().equalsIgnoreCase("y")) {
+			editAssetAdminVTOObject.setCarry(true);
+		}
+		// setting if available for use
+		if (asset.getAvailableForUse().equalsIgnoreCase("y")) {
+			editAssetAdminVTOObject.setAvailable(true);
+		}
+		// setting date of capitalisation
+		editAssetAdminVTOObject.setDateOfCapitalisation(AMSDateUtil
+				.convertDateToString(AMSDateUtil.toDate(asset
+						.getCapitalisationDate())));
+		// getting attribute list from service
+		List<Attribute> attributeList = asset.getAttributeList();
+
+		// creating attribute list for VTO
+		List<AttributeType> attributeTypeList = new ArrayList<AttributeType>();
+
+		// looping through attribute list from service
+		// assigning it to VTO object attribute list
+		for (Attribute attributeObject : attributeList) {
+
+			AttributeType attributeTypeObject = new AttributeType();
+			// setting attribute Id
+			attributeTypeObject.setId(attributeObject.getId());
+			// Setting field name to be used in VTO
+			attributeTypeObject.setFieldName(AMSNameUtil
+					.convertToVariableName(attributeObject.getName()));
+			// setting label name to be used in VTO
+			attributeTypeObject.setLabelName(AMSNameUtil
+					.convertToLabelName(attributeObject.getName()));
+			attributeTypeObject.setValue(attributeObject.getValue());
+			attributeTypeList.add(attributeTypeObject);
+		}
+		editAssetAdminVTOObject.setAttributeTypeList(attributeTypeList);
+
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW081D"),
+				editAssetAdminVTOObject.toString()));
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return editAssetAdminVTOObject;
+	}
+
+	/**
+	 * Update Asset using service
+	 * 
+	 * @param asset
+	 *            ID from web page
+	 * @return the Values to controller for Edit Asset UI page
+	 * @throws ObjectManagerException
+	 */
+	public static String callServiceToEditAsset(
+			AssetManagerServicePortProxy webServiceAccess,
+			EditAssetVTO assetObject) {
+		final String METHOD_NAME = "callServiceToEditAsset";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW082D"),
+				assetObject.toString()));
+
+		// create asset object to be passed as argument to WS
+		Asset asset = new Asset();
+		Acknowledgement acknowledgement = new Acknowledgement();
+		// AssetType Object to set AssetType Name and ID
+		asset.setAssetId(assetObject.getAssetId());
+		AssetType assetType = new AssetType();
+		try {
+			assetType.setAssetTypeId(AssetTypeAdaptor
+					.getAssetTypeIdFromName(assetObject.getAssetType()));
+		} catch (AssetPortalWSException e1) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW082E"),
+					e1.getMessage()));
+			acknowledgement.setMessage("Update Failed");
+		}
+
+		// setting AssetType to Asset Object
+		asset.setAssetType(assetType);
+		// Getting Attribute List type reference from Asset Object
+		List<Attribute> attributeList = asset.getAttributeList();
+
+		// getting Attributes name and value from VTO
+		List<AttributeType> attributeTypeList = assetObject
+				.getAttributeTypeList();
+
+		// Getting Id, Name, Value from Attributes
+		for (AttributeType attributeTypeLoopObject : attributeTypeList) {
+			Attribute a = new Attribute();
+			// setting Id and Name
+			a.setId(attributeTypeLoopObject.getId());
+			a.setName(attributeTypeLoopObject.getFieldName());
+			a.setValue(attributeTypeLoopObject.getValue());
+			attributeList.add(a);
+
+		}
+		try {
+			asset.setCapitalisationDate(AMSDateUtil
+					.toXMLGregorianCalendar(assetObject
+							.getDateOfCapitalisation()));
+		} catch (ParseException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW083E"),
+					e.getMessage()));
+		} catch (DatatypeConfigurationException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW083E"),
+					e.getMessage()));
+		}
+
+		// checking 'asset availability' boolean in VTO available and setting
+		// asset object
+		// mandatory for WS
+		if (assetObject.isAvailable()) {
+			asset.setAvailableForUse("Y");
+		} else {
+			asset.setAvailableForUse("N");
+		}
+		// checking if 'allowed to carry' boolean in VTO available and setting
+		// asset object
+		if (assetObject.isCarry()) {
+			asset.setInHouseFlag("Y");
+		} else {
+			asset.setInHouseFlag("N");
+		}
+
+		// Creating Employee Object to set Owner Id
+		Employee employee = new Employee();
+		// Setting owner Id
+		employee.setEmpId(assetObject.getOwnerId());
+		// Setting owner in asset
+		asset.setOwner(employee);
+
+		try {
+			acknowledgement = webServiceAccess.updateAsset(asset);
+		} catch (AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084E"),
+					e.getMessage()));
+			acknowledgement.setMessage("Update Failed");
+		}
+
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW081ACK"),
+				acknowledgement.toString()));
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+
+		return acknowledgement.getMessage();
+	}
+
+	/**
+	 * @param resolveObject
+	 * @param webServiceRequestAccess
+	 * @return
+	 */
+	public static String sendResolveActionService(ResolveVTO resolveObject,
+			RequestManagerPortProxy webServiceRequestAccess) {
+		String result = null;
+		final String METHOD_NAME = "sendResolveActionService";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		
+		try {
+			UpdateRequestDetails updateRequestDetailsObject = new UpdateRequestDetails();
+			Integer reqId = Integer.parseInt(resolveObject.getRequestId());
+		
+			updateRequestDetailsObject.setOwnerId((Integer
+					.parseInt(resolveObject.getOwnerId())));
+			updateRequestDetailsObject.setRequestId(reqId);
+
+			String resolveStatus = resolveObject.getResolveClick();
+
+			// comments
+
+			Acknowledgement ask1 = webServiceRequestAccess.updateAdminNotes(
+					reqId, resolveObject.getComments());
+			if (resolveStatus.equals("resolved")) {
+				updateRequestDetailsObject.setAssetId((Integer
+						.parseInt(resolveObject.getAssetIdOriginal())));
+				
+				updateRequestDetailsObject
+						.setStatusId(AMSAdminConstants.ASSIGNMENT_STATUS.ISSUED
+								.getOrd());
+				Acknowledgement ask = webServiceRequestAccess
+						.updateEmployeeRequest(updateRequestDetailsObject,
+								RequestOperationEnum.ADMIN_APPROVED);
+				String acknowledge = ask.getMessage();
+				logger.fine(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1206D"), acknowledge));
+				logger.exiting(CLASS_NAME, METHOD_NAME);
+
+				result = acknowledge.concat(ask1.getMessage());
+			} else if (resolveStatus.equals("onHold")) {
+				
+				updateRequestDetailsObject
+						.setStatusId(AMSAdminConstants.ASSIGNMENT_STATUS.ADMIN_HOLD
+								.getOrd());
+				Acknowledgement ask = webServiceRequestAccess
+						.updateEmployeeRequest(updateRequestDetailsObject,
+								RequestOperationEnum.ADMIN_HOLD);
+				String acknowledge = ask.getMessage();
+				logger.fine(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1206D"), acknowledge));
+				logger.exiting(CLASS_NAME, METHOD_NAME);
+				result = acknowledge.concat(ask1.getMessage());
+			} else {
+				
+				updateRequestDetailsObject
+						.setStatusId(AMSAdminConstants.ASSIGNMENT_STATUS.ADMIN_REJECTED
+								.getOrd());
+				Acknowledgement ask = webServiceRequestAccess
+						.updateEmployeeRequest(updateRequestDetailsObject,
+								RequestOperationEnum.ADMIN_REJECTED);
+				String acknowledge = ask.getMessage();
+				logger.fine(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1206D"), acknowledge));
+				logger.exiting(CLASS_NAME, METHOD_NAME);
+				result = acknowledge.concat(ask1.getMessage());
+			}
+
+		} catch (com.avnet.assetportal.webservice.request.AssetPortalWSException e) {
+			e.printStackTrace();
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1202E"),
+					e.getMessage()));
+		}
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return result;
+	}
+
+	/**
+	 * @param webServiceAccess
+	 * @param searchString
+	 * @param searchIdType
+	 * @return
+	 */
+	public static JSONObject getAvailableAssetValuesFromService(
+			AssetManagerServicePortProxy webServiceAccess, String searchString,
+			String searchIdType) {
+		final String METHOD_NAME = "getAvailableAssetValuesFromService";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1201D"),
+				webServiceAccess, searchString, searchIdType));
+		AvailableAssetVTO availableAssetAdminVTOObject = new AvailableAssetVTO();
+		AssetList assetListBean = null;
+		
+		try {
+			if (searchIdType.equals("1")) {
+
+				assetListBean = webServiceAccess.getAssets(SortOrderEnum.ASC,
+						SortColumnEnum.ASSET_TYPE, 0, 10,
+						SearchTypeEnum.ASSET_SHORTTEXT, searchString);
+
+				logger.fine(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1207D"), assetListBean));
+			} else {
+				searchString = searchString.toUpperCase();
+				assetListBean = webServiceAccess.getAssets(SortOrderEnum.ASC,
+						SortColumnEnum.ASSET_TYPE, 0, 10,
+						SearchTypeEnum.ASSET_IDENTITY, searchString);
+
+				logger.fine(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1207D"), assetListBean));
+			}
+			logger.fine(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1202D"),
+					availableAssetAdminVTOObject));
+		} catch (AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1201E"),
+					"Invalid User"));
+		}
+		if(assetListBean==null){
+			JSONObject jsonObject = AMSJsonUtil
+			.convertToAvailableAssetsJsonNull(availableAssetAdminVTOObject);
+			return jsonObject;
+		}
+
+		List<Asset> assetList = assetListBean.getAssetList();
+		ArrayList<String> assetId = new ArrayList<String>();
+		ArrayList<String> assetType = new ArrayList<String>();
+		ArrayList<String> assetIdOriginal = new ArrayList<String>();
+		for (int i = 0; i < assetList.size(); i++) {
+			List<Attribute> attrList = assetList.get(i).getAttributeList();
+			for (Attribute attr : attrList) {
+				assetType.add(attr.getValue());
+				assetId.add(assetList.get(i).getAssetIdentity());
+				assetIdOriginal.add(assetList.get(i).getAssetId());
+			}
+		}
+		availableAssetAdminVTOObject.setAssetId(assetId);
+		availableAssetAdminVTOObject.setAssetType(assetType);
+		availableAssetAdminVTOObject.setAssetIdOriginal(assetIdOriginal);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToAvailableAssetsJson(availableAssetAdminVTOObject);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1203D"),
+				jsonObject));
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+	}
+
+	public static int stringToInteger(String var) {
+		final String METHOD_NAME = "stringToInteger";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return Integer.parseInt(var);
+	}
+
+	public static JSONObject getOwnedByUser(
+			UserManagerPortProxy webServiceAccessApprover) {
+		// webServiceAccessApprover.getAllEmployees();
+		final String METHOD_NAME = "getOwnedByUser";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		List<EmployeeIds> empIds = null;
+		try {
+			empIds = webServiceAccessApprover.getEmployeeIds("");
+		} catch (com.avnet.assetportal.webservice.usermanager.AssetPortalWSException e) {
+			//FIXME
+		}
+		Iterator<EmployeeIds> iter = empIds.iterator();
+		List<EmployeeDetailsOwnedby> empList = new ArrayList<EmployeeDetailsOwnedby>();
+
+		while (iter.hasNext()) {
+			EmployeeIds iterationObject = iter.next();
+			EmployeeDetailsOwnedby emp = new EmployeeDetailsOwnedby(
+					iterationObject.getEmpId(), iterationObject.getName());
+			empList.add(emp);
+		}
+
+		JSONObject jsonObject = AMSJsonUtil.convertToEmployeeNameJson(empList);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+	}
+
+	public static JSONObject viewAssetOnSearchSort(
+			AssetManagerServicePortProxy webServiceAccess, String searchType,
+			String searchString, String start, String length, String column,
+			String dir) {
+		ViewAssetsCountVTO viewAssetsCountVTO = null;
+		try {
+			viewAssetsCountVTO = WSGetClass.getValuesForViewAssetsSearchSort(
+					webServiceAccess, searchType, searchString, Integer
+							.toString((Integer.parseInt(start)) + 1), Integer
+							.toString((Integer.parseInt(start))
+									+ (Integer.parseInt(length))), dir
+							.toUpperCase(),
+					AMSAdminConstants.ASSETS_SORT_COLUMN[(Integer
+							.parseInt(column))]);
+
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+
+		} catch (AssetPortalWSException e) {
+			JSONObject jsonErrorObject = AMSJsonUtil
+					.convertToAssetsSearchErrorJson();
+
+			return jsonErrorObject;
+		} catch (SOAPFaultException e) {
+			JSONObject jsonErrorObject = AMSJsonUtil
+					.convertToAssetsSearchErrorJson();
+			return jsonErrorObject;
+		}
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToAssetsSearchJson(viewAssetsCountVTO);
+		return jsonObject;
+	}
+
+	public static JSONObject getAssetsOfEmployee(
+			AssetManagerServicePortProxy webServiceAccess, String searchType,
+			String searchString, String start, String length, String column,
+			String dir) {
+			
+		final String METHOD_NAME = "getAssetsOfEmployee";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		start=Integer.toString((Integer.parseInt(start)) + 1);
+		length=Integer.toString((Integer.parseInt(start))+ (Integer.parseInt(length))-1);
+		dir=dir.toUpperCase();
+		if(Integer.parseInt(column) < 2)
+			column=AMSAdminConstants.ASSETS_SORT_COLUMN[(Integer.parseInt(column))-1];
+		else{
+				column=AMSAdminConstants.ASSETS_HISTORY_SORT_COLUMN[0];
+			}
+		
+		SearchTypeEnum searchTypeEnum = null;
+		SortOrderEnum sortOrderEnum = null;
+		SortColumnEnum sortColumnEnum = null;
+		AssetList assets;
+		try {
+			assets = webServiceAccess.getAssets(
+					sortOrderEnum.valueOf(dir),
+					sortColumnEnum.valueOf(column),
+					AMSAdminDelegate.stringToInteger(start),
+					AMSAdminDelegate.stringToInteger(length),
+					searchTypeEnum.valueOf(searchType), searchString);
+		} catch (AssetPortalWSException e) {
+			// TODO Auto-generated catch block
+			assets = new AssetList();
+		}
+
+		ViewAssetsCountVTO viewAssetsCountVTO = new ViewAssetsCountVTO();
+		ArrayList<ViewAssetsAdminVTO> viewAssetsAdminTempList = new ArrayList<ViewAssetsAdminVTO>();
+		viewAssetsCountVTO.setMaxCount(assets.getMaxCount());
+		if (viewAssetsCountVTO.getMaxCount() > 0) {
+			Iterator<Asset> assetIterator = assets.getAssetList().iterator();
+			Asset asset = new Asset();
+			while (assetIterator.hasNext()) {
+				asset = assetIterator.next();
+				ViewAssetsAdminVTO assetEmployee = new ViewAssetsAdminVTO();
+				assetEmployee.setAssetId(asset.getAssetId());
+				assetEmployee.setAssetIdentity(asset.getAssetIdentity());
+				assetEmployee.setAssetType(asset.getAssetType()
+						.getAssetTypeName().toString());
+				try {
+					assetEmployee.setIssuedDate(asset.getIssuedDate()
+							.toString().split("T")[0]);
+				} catch (Exception e) {
+					assetEmployee.setIssuedDate("NA");
+				}
+				viewAssetsAdminTempList.add(assetEmployee);
+
+			}
+
+		} else {
+			// viewAssetsAdminTempList.add(new ViewAssetsAdminVTO());
+
+		}
+
+		viewAssetsCountVTO
+				.setViewAssetsAdminVTOList(viewAssetsAdminTempList);
+		
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToAssetsSearchJson(viewAssetsCountVTO);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+
+	}
+
+	/**
+	 * submits the the Add Asset form to the webservice. Calls addAsset() for
+	 * adding the asset. Passes Asset as parameter.
+	 */
+
+	public static String setAddAssetService(AddAssetVTO addAssetVTO,
+			AssetManagerServicePortProxy webServiceAccess) {
+
+		final String METHOD_NAME = "setAddAssetService";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1061D"),
+				addAssetVTO.toString()));
+		Asset asset = new Asset();
+		@SuppressWarnings("unused")
+		List<Attribute> attrListFromService = null;
+		List<AttributeType> attrListInVTO = addAssetVTO.getAttributeTypeList();
+
+		String assetId = addAssetVTO.getAssetType();
+		try {
+			attrListFromService = webServiceAccess.getAttributes(assetId);
+		} catch (AssetPortalWSException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		List<Attribute> attributeForService = asset.getAttributeList();
+		Iterator<AttributeType> iterator = attrListInVTO.iterator();
+		while (iterator.hasNext()) {
+			Attribute attrServiceObject = new Attribute();
+			AttributeType attrVTO = iterator.next();
+			attrServiceObject.setId(attrVTO.getId());
+			attrServiceObject.setValue(attrVTO.getValue());
+			attributeForService.add(attrServiceObject);
+		}
+
+		AssetType assetType = new AssetType();
+		assetType.setAssetTypeId(addAssetVTO.getAssetType());
+
+		asset.setAssetType(assetType);
+		asset.setAssetStatus(AssetStatusEnum.UNASSIGNED);
+
+		try {
+			asset.setProcuredDate(AMSDateUtil
+					.toXMLGregorianCalendar(addAssetVTO.getProcuredDate()));
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (DatatypeConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		asset.setCreatedBy("Support Team");
+		if (addAssetVTO.getAvailable().equals("yes")) {
+			asset.setAvailableForUse("Y");
+		} else {
+			asset.setAvailableForUse("N");
+		}
+
+		Employee employee = new Employee();
+		employee.setEmpId(AMSAdminConstants.OWNEDBY);
+		asset.setOwner(employee);
+
+		Acknowledgement ack = null;
+		try {
+			ack = webServiceAccess.addAsset(asset);
+		} catch (AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1061E"),
+					e.getMessage()));
+		}
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		String returnString = ack.getMessage();
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1061ACK"),
+				returnString));
+		return returnString;
+	}
+
+	/**
+	 * returns the list of all attributes
+	 * 
+	 * @param webServiceAccess
+	 * @return
+	 * @throws AssetPortalWSException
+	 */
+
+	public static HashMap<String, String> getAllAttributes(
+			AssetManagerServicePortProxy webServiceAccess)
+			throws AssetPortalWSException {
+		// gets the HashMap of all the attributes from service
+		HashMap<String, String> tempAttr = new HashMap<String, String>();
+		List<Attribute> allAttr = null;
+
+		allAttr = webServiceAccess.getAttributes("");
+
+		for (int i = 0; i < allAttr.size(); i++) {
+			String key = allAttr.get(i).getName();
+			String value = allAttr.get(i).getId();
+			tempAttr.put(key.replaceAll("\\s+", ""), value);
+		}
+		//
+		return tempAttr;
+
+	}
+
+	/**
+	 * populates the attribute list that needs to be set to asset type object
+	 * 
+	 * @param webServiceAccess
+	 */
+	public static void populateAttrList(
+			AssetManagerServicePortProxy webServiceAccess,
+			HashMap<String, String> varMap, HashMap<String, String> tempAttr,
+			AssetType assetType) {
+
+		List<Attribute> attrList = assetType.getAttributeList();
+		// populating attribute list to be passed as parameter for asset
+		// type obj.
+		for (Entry<String, String> varMapLoopObj : varMap.entrySet()) {
+			Attribute attr = new Attribute();
+			for (Entry<String, String> tempAttrLoopObj : tempAttr.entrySet()) {
+				if (tempAttrLoopObj.getKey().toLowerCase()
+						.equals(varMapLoopObj.getKey().toLowerCase())) {
+					attr.setId(tempAttrLoopObj.getValue());
+					attrList.add(attr);
+				}
+			}
+		}
+	}
+
+	/**
+	 * submits the the Manage Asset form to the webservice. Calls
+	 * updateAssetType() for edit radio and addAssetType() for add radio. Passes
+	 * AssetType as parameter.
+	 */
+
+	public static JSONObject manageAsset(
+			com.avnet.ams.vto.ManageAssetVTO manageAssetVTO,
+			AssetManagerServicePortProxy webServiceAccess) {
+		final String METHOD_NAME = "manageAsset";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1001D"),
+				manageAssetVTO.toString()));
+
+		HashMap<String, String> tempAttr;
+		try {
+			tempAttr = getAllAttributes(webServiceAccess);
+		} catch (AssetPortalWSException e1) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1001E"),
+					e1.getMessage()));
+			return AcknowledgementJsonUtil
+					.getJsonForAck("getAttributesException");
+
+		}
+		HashMap<String, String> varMap = manageAssetVTO
+				.getAllCheckedAttributes();
+		String edit = varMap.get("method");
+
+		// updating asset type
+		if (edit.equals("edit")) {
+			AssetType assetType = new AssetType();
+			populateAttrList(webServiceAccess, varMap, tempAttr, assetType);
+
+			// setting all needed parameters in asset type obj
+			List<AssetType> allAssets = null;
+			try {
+				allAssets = webServiceAccess.getAssetType();
+			} catch (AssetPortalWSException e) {
+				logger.severe(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1002E"), e.getMessage()));
+			}
+			for (int i = 0; i < allAssets.size(); i++) {
+				if (allAssets
+						.get(i)
+						.getAssetTypeId()
+						.toLowerCase()
+						.replaceAll("\\s+", "")
+						.equals(manageAssetVTO.getDropDown()
+								.replaceAll("\\s+", "").toLowerCase())) {
+					assetType.setAssetTypeId(allAssets.get(i).getAssetTypeId());
+					assetType.setAssetTypeName(allAssets.get(i)
+							.getAssetTypeName());
+					assetType.setLifeTime(manageAssetVTO.getLifeTime());
+					assetType.setAssetTypePrefix("");
+					String firstLetter = Character.toString(manageAssetVTO
+							.getCarry().charAt(0));
+					assetType.setInHouseFlag(firstLetter);
+					break;
+				}
+			}
+			//
+
+			logger.fine(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1002D"),
+					assetType.getAssetTypeId(), assetType.getAssetTypeName(),
+					assetType.getAssetTypePrefix(), assetType
+							.getAttributeList().size(), assetType
+							.getInHouseFlag(), assetType.getLifeTime()));
+			Acknowledgement ack = null;
+			try {
+				ack = webServiceAccess.updateAssetType(assetType);
+			} catch (AssetPortalWSException e) {
+				logger.severe(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1003E"), e.getMessage()));
+				return AcknowledgementJsonUtil
+						.getJsonForAck("updateAssetTypeError");
+			}
+			String returnString = ack.getMessage() + "|" + ack.getStatus();
+			JSONObject ackJson = AcknowledgementJsonUtil.getJsonForAck(ack
+					.getMessage());
+			logger.fine(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE
+							.getString("AMSW1001ACK"), returnString));
+
+			logger.exiting(CLASS_NAME, METHOD_NAME);
+			return ackJson;
+		}
+
+		// for adding asset type
+		if (edit.equals("add")) {
+			AssetType assetType = new AssetType();
+			populateAttrList(webServiceAccess, varMap, tempAttr, assetType);
+			// setting values for asset type obj
+			assetType.setAssetTypeName(manageAssetVTO.getTypeName());
+			assetType.setLifeTime(manageAssetVTO.getLifeTime());
+			assetType.setAssetTypePrefix(manageAssetVTO.getPrefix());
+			String firstLetter = Character.toString(manageAssetVTO.getCarry()
+					.charAt(0));
+			assetType.setInHouseFlag(firstLetter);
+			//
+
+			logger.fine(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1003D"),
+					assetType.getAssetTypeId(), assetType.getAssetTypeName(),
+					assetType.getAssetTypePrefix(), assetType
+							.getAttributeList().size(), assetType
+							.getInHouseFlag(), assetType.getLifeTime()));
+
+			Acknowledgement ack = null;
+			try {
+				ack = webServiceAccess.addAssetType(assetType);
+			} catch (AssetPortalWSException e) {
+				logger.severe(MessageFormat.format(
+						LoggerConstants.APP_CONSTANTS_BUNDLE
+								.getString("AMSW1004E"), e.getMessage()));
+				return AcknowledgementJsonUtil
+						.getJsonForAck("addAssetTypeError");
+			}
+			String returnString = ack.getMessage() + "|" + ack.getStatus();
+			JSONObject ackJson = AcknowledgementJsonUtil.getJsonForAck(ack
+					.getMessage());
+			
+			logger.fine(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE
+							.getString("AMSW1001ACK"), returnString));
+
+			logger.exiting(CLASS_NAME, METHOD_NAME);
+
+			return ackJson;
+		}
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return null;
+	}
+
+	public static AssetTypeList getTypes(
+			AssetManagerServicePortProxy webServiceAccess) throws Exception {
+		List<AssetType> type1 = webServiceAccess.getAssetType();
+		AssetTypeList typeList = new AssetTypeList();
+		ArrayList<String> type = new ArrayList<String>();
+		for (int i = 0; i < type1.size(); i++) {
+			type.add(type1.get(i).getAssetTypeName());
+		}
+		typeList.setAssetType(type);
+		return typeList;
+
+	}
+
+	public static JSONObject getEmployeeDetails(
+			UserManagerPortProxy webServiceAccessApprover, String search) {
+
+		ArrayList<EmployeeDetailsClientVTO> employeeDetailsTempList = new ArrayList<EmployeeDetailsClientVTO>();
+
+		List<EmployeeDetails> employeeDetailsFromServer = null;
+		try {
+			employeeDetailsFromServer = webServiceAccessApprover
+					.getEmployeeDetails(search);
+		} catch (com.avnet.assetportal.webservice.usermanager.AssetPortalWSException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		EmployeeDetailsListVTO employeeDetailsListVTO = new EmployeeDetailsListVTO();
+
+		Iterator<EmployeeDetails> iter = employeeDetailsFromServer.iterator();
+		EmployeeDetails employeeDetails = new EmployeeDetails();
+
+		while (iter.hasNext()) {
+			employeeDetails = iter.next();
+			EmployeeDetailsClientVTO employeeDetailsClientVTO = new EmployeeDetailsClientVTO();
+			try {
+				employeeDetailsClientVTO.setEmpId(employeeDetails.getEmpId());
+			} catch (Exception e) {
+				employeeDetailsClientVTO.setEmpId("--");
+			}
+			try {
+				employeeDetailsClientVTO.setName(employeeDetails.getName());
+			} catch (Exception e) {
+				employeeDetailsClientVTO.setName("--");
+			}
+			try {
+				employeeDetailsClientVTO.setBusinessUnit(employeeDetails
+						.getBusinessUnit());
+			} catch (Exception e) {
+				employeeDetailsClientVTO.setBusinessUnit("--");
+			}
+			try {
+				employeeDetailsClientVTO.setDesignation(employeeDetails
+						.getDesignation());
+			} catch (Exception e) {
+				employeeDetailsClientVTO.setDesignation("--");
+			}
+			employeeDetailsTempList.add(employeeDetailsClientVTO);
+
+		}
+		employeeDetailsListVTO
+				.setEmployeeDetailsListVTO(employeeDetailsTempList);
+
+		// //
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToEmployeeDetailsJson(employeeDetailsListVTO);
+
+		return jsonObject;
+	}
+
+	public static JSONObject getNotificationTicker(
+			RequestManagerPortProxy webServiceRequestAccess) {
+		List<RecentActivityDetails> notificationList = null;
+		JSONObject notificationJSON = null, wrapperJSON = null;
+		JSONArray notificationArray = null;
+
+		try {
+			notificationList = webServiceRequestAccess.getRecentActivity();
+			notificationArray = new JSONArray();
+			for (RecentActivityDetails recentActivityObject : notificationList) {
+				notificationJSON = new JSONObject();
+				notificationJSON.put("AssetId",
+						recentActivityObject.getAssetId());
+				notificationJSON.put("OwnedBy",
+						recentActivityObject.getOwnedBy());
+				notificationJSON.put("dueDate", AMSDateUtil.getDate(AMSDateUtil
+						.toDate(recentActivityObject.getDueDate())));
+				notificationArray.add(notificationJSON);
+			}
+			wrapperJSON = new JSONObject();
+			wrapperJSON.put("notification", notificationArray);
+			return wrapperJSON;
+
+		} catch (com.avnet.assetportal.webservice.request.AssetPortalWSException e) {
+			JSONArray errorJSONArray = new JSONArray();
+			JSONObject errorwrapperJSON = new JSONObject();
+			errorwrapperJSON.put("notification", errorJSONArray);
+			e.printStackTrace();
+			return errorwrapperJSON;
+		} catch (Exception e) {
+			JSONArray errorJSONArray = new JSONArray();
+			JSONObject errorwrapperJSON = new JSONObject();
+			errorwrapperJSON.put("notification", errorJSONArray);
+			e.printStackTrace();
+			return errorwrapperJSON;
+		}
+
+	}
+
+	public static JSONObject getReportTypeJson(
+			ReportManagerPortProxy webServiceAccess) {
+		final String METHOD_NAME = "getReportTypeJson";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		// getting values from service
+		List<ViewReportVTO> reportArrayList = null;
+		List<ReportType> allReports = null;
+		try {
+			allReports = webServiceAccess.getReportType();
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084E"),
+					e.getMessage()));
+		}
+
+		Iterator<ReportType> iter = allReports.iterator();
+		ReportType reportType = null;
+		ViewReportVTO viewReport = null;
+		reportArrayList = new ArrayList<ViewReportVTO>();
+		while (iter.hasNext()) {
+			reportType = iter.next();
+			viewReport = new ViewReportVTO();
+			viewReport.setReportId(reportType.getReportId());
+			viewReport.setReportName(reportType.getReportName());
+			reportArrayList.add(viewReport);
+
+		}
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToReportListJson(reportArrayList);
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+
+	}
+
+	public static JSONObject setReportService(String reportType,
+			ReportManagerPortProxy webServiceAccessReport) {
+		final String METHOD_NAME = "setReportService";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1062D"),
+				reportType));
+
+		int reportId = 0;
+		Iterator<ReportType> reportList = null;
+		try {
+			reportList = webServiceAccessReport.getReportType().iterator();
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1062E"),
+					e.getMessage()));
+		}
+		ReportType dummyReportType;
+		while (reportList.hasNext()) {
+			dummyReportType = reportList.next();
+			if (dummyReportType.getReportName().equals(reportType)) {
+				reportId = dummyReportType.getReportId();
+			}
+		}
+
+		ReportResults reportResults = null;
+		try {
+			reportResults = webServiceAccessReport.generateReport(0, 0,
+					reportId);
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW1063E"),
+					e.getMessage()));
+			return AMSJsonUtil.convertToErrorJson("Data not available for the selected Report Type");
+		}
+		if (reportResults == null) {
+			//return error JSON
+			return AMSJsonUtil.convertToErrorJson("Data not available for the selected Report Type");
+		}
+		List<ReportResultsList> reportResultsList = reportResults
+				.getReportResults();
+
+		JSONObject jsonObjectWrapper = AMSJsonUtil
+				.convertToReportDetails(reportResultsList);
+
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObjectWrapper;
+	}
+
+	/**
+	 * delegate method for getting assets for assets page
+	 * 
+	 * @param webServiceAccess
+	 * @param searchType
+	 * @param searchString
+	 * @param start
+	 * @param length
+	 * @param column
+	 * @param dir
+	 * @return
+	 */
+	public static JSONObject getAssets(
+			AssetManagerServicePortProxy webServiceAccess, String searchType,
+			String searchString, String start, String length, String column,
+			String dir) {
+		final String METHOD_NAME = "getAssets";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW141D"),
+				searchType, searchString, start, length, column));
+
+		ViewAssetsCountVTO viewAssetsAdminCountVTOObject = new ViewAssetsCountVTO();
+
+		String min = Integer.toString((Integer.parseInt(start)) + 1);
+		String max = Integer.toString((Integer.parseInt(start))
+				+ (Integer.parseInt(length)));
+
+		searchString = searchString.trim();
+		AssetList assets;
+
+		List<AssetType> assetType;
+		try {
+			assetType = webServiceAccess.getAssetType();
+			ListIterator<AssetType> iter = assetType.listIterator();
+			while (iter.hasNext()) {
+				if (iter.next().getAssetTypeName().equals(searchString)) {
+					searchString = iter.previous().getAssetTypeId();
+				}
+			}
+			assets = webServiceAccess.getAssets(
+					AMSAdminConstants.getOrderEnum(dir),
+					AMSAdminConstants.getSortColumn(column),
+					AMSAdminDelegate.stringToInteger(min),
+					AMSAdminDelegate.stringToInteger(max),
+					AMSAdminConstants.getSearchType(searchType), searchString);
+			viewAssetsAdminCountVTOObject.setMaxCount(assets.getMaxCount());
+
+			if (viewAssetsAdminCountVTOObject.getMaxCount() > 0) {
+				List<Asset> assetsList = assets.getAssetList();
+				ViewAssetsAdminVTO[] viewAssetsAdminVTOObject = new ViewAssetsAdminVTO[assetsList
+						.size()];
+
+				for (int i = 0; i < viewAssetsAdminVTOObject.length; i++) {
+					viewAssetsAdminVTOObject[i] = new ViewAssetsAdminVTO();
+					viewAssetsAdminVTOObject[i].setAssetId(assetsList.get(i)
+							.getAssetId());
+					viewAssetsAdminVTOObject[i].setAssetIdentity(assetsList.get(i)
+							.getAssetIdentity());
+					viewAssetsAdminVTOObject[i].setAssetType(assetsList.get(i)
+							.getAssetType().getAssetTypeName());
+					viewAssetsAdminVTOObject[i].setOwner(assetsList.get(i)
+							.getOwner().getEmpFirstName());
+					viewAssetsAdminVTOObject[i].setPurchasedDate(AMSDateUtil
+							.getDate(AMSDateUtil.toDate(assetsList.get(i)
+									.getProcuredDate())));
+
+				}
+				ArrayList<ViewAssetsAdminVTO> viewAssetsTempList = new ArrayList<ViewAssetsAdminVTO>();
+				for (int j = 0; j < viewAssetsAdminVTOObject.length; j++) {
+					viewAssetsTempList.add(viewAssetsAdminVTOObject[j]);
+				}
+				viewAssetsAdminCountVTOObject
+						.setViewAssetsAdminVTOList(viewAssetsTempList);
+			}
+
+		} catch (AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW141E"),
+					e.getMessage()));
+			JSONObject jsonErrorObject = AMSJsonUtil
+					.convertToAssetsSearchErrorJson();
+			return jsonErrorObject;
+		}
+
+		JSONObject jsonObject = AMSJsonUtil
+				.convertToAssetsSearchJson(viewAssetsAdminCountVTOObject);
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW143D"),
+				jsonObject));
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObject;
+	}
+
+	/**
+	 * 
+	 * 
+	 * @param webServiceAccess
+	 * @return
+	 * @throws Exception
+	 */
+	public static AssetTypeList getAssetTypesList(
+			AssetManagerServicePortProxy webServiceAccess) {
+		final String METHOD_NAME = "getTypes";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		List<AssetType> type1 = null;
+		try {
+			type1 = webServiceAccess.getAssetType();
+		} catch (AssetPortalWSException e) {
+			//FIXME
+		}
+		AssetTypeList typeList = new AssetTypeList();
+		ArrayList<String> type = new ArrayList<String>();
+		for (int i = 0; i < type1.size(); i++) {
+			type.add(type1.get(i).getAssetTypeName());
+		}
+
+		
+		typeList.setAssetType(type);
+
+//		logger.fine(MessageFormat.format(
+//				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW144D"),
+//				typeList.getAssetType().size()));
+
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return typeList;
+	}
+
+	public static com.avnet.ams.vto.EmployeeDetails getUsersList(UserManagerPortProxy webServiceAccessApprover)
+	{
+		List<EmployeeIds> employeeIds = null;
+		try {
+			employeeIds = webServiceAccessApprover.getEmployeeIds("");
+		} catch (com.avnet.assetportal.webservice.usermanager.AssetPortalWSException e) {
+			//FIXME
+		}
+
+		com.avnet.ams.vto.EmployeeDetails employeeList = new com.avnet.ams.vto.EmployeeDetails();
+		ArrayList<String> employee = new ArrayList<String>();
+		for (int i = 0; i < employeeIds.size(); i++) {
+			employee.add(employeeIds.get(i).getEmpId()); 
+			employee.add(employeeIds.get(i).getName());
+		}
+		employeeList.setEmployeeId(employee);
+		
+		return employeeList;
+		
+	}
+	
+
+
+
+	public static JSONObject getAssetsHistoryReport(
+			ReportManagerPortProxy webServiceReportAccess, String searchType,
+			String searchString, String start, String length, String column,
+			String dir) {
+		
+		String min = Integer.toString((Integer.parseInt(start)) + 1);
+		String max = Integer.toString((Integer.parseInt(start))
+				+ (Integer.parseInt(length)));
+
+		searchString = searchString.trim();
+		AssetsHistoryCountVTO assetsHistoryVTO = new AssetsHistoryCountVTO();
+		try
+		{
+			AssetReport assetReport = webServiceReportAccess.getAssetHistory(AMSAdminConstants.getOrderEnum(dir),
+					AMSAdminConstants.getSortColumnReport(column,searchType), 
+					AMSAdminDelegate.stringToInteger(min),
+					AMSAdminDelegate.stringToInteger(max),
+					AMSAdminConstants.getSearchTypeReport(searchType), searchString);
+			assetsHistoryVTO.setMaxCount(assetReport.getMaxCount());
+			System.out.println(assetReport.getMaxCount()); 
+			List<AssetDetails> assetReportDetails = assetReport.getAssetHistoryList();
+			
+			AssetsHistoryVTO[] assetsHistory = new AssetsHistoryVTO[assetReportDetails.size()];
+
+				for (int i = 0; i < assetsHistory.length; i++) {
+					assetsHistory[i] = new AssetsHistoryVTO();
+					assetsHistory[i].setAssetId(assetReportDetails.get(i)
+							.getAssetId());
+					assetsHistory[i].setUserId(assetReportDetails.get(i)
+							.getUserId());
+					assetsHistory[i].setAssetType(assetReportDetails.get(i)
+							.getAssetType());
+					assetsHistory[i].setDesignation(assetReportDetails.get(i)
+							.getDesignation());
+					assetsHistory[i].setIssuedDate(AMSDateUtil.getDate(AMSDateUtil.toDate(assetReportDetails.get(i).getDateOfIssue())));
+					assetsHistory[i].setReturnedDate(AMSDateUtil.getDate(AMSDateUtil.toDate(assetReportDetails.get(i).getDateOfReturn())));
+
+				}
+				ArrayList<AssetsHistoryVTO> viewAssetsTempList = new ArrayList<AssetsHistoryVTO>();
+				for (int j = 0; j < assetsHistory.length; j++) {
+					viewAssetsTempList.add(assetsHistory[j]);
+				}
+				assetsHistoryVTO
+						.setGetAssetsHistory(viewAssetsTempList);
+				
+				JSONObject jsonObject = AMSJsonUtil
+					.convertToAssetsHistoryJson(assetsHistoryVTO);
+
+			return jsonObject;
+	
+		}
+		catch(com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e)
+		{
+			JSONObject jsonErrorObject = AMSJsonUtil
+					.convertToAssetsSearchErrorJson();
+			return jsonErrorObject;
+		}
+			}
+	/**
+	 * @author Dinesh
+	 * @return get values obtained from web service for attributes and
+	 *         populating the List object
+	 * @throws AssetPortalWSException
+	 */
+	public static List<Attribute> getValuesForAttributesList(
+			AssetManagerServicePortProxy webServiceAccess)
+			throws AssetPortalWSException {
+
+		// Calling WS to get Attribute type List
+		List<Attribute> attributeList = webServiceAccess.getAttributes("");
+
+		return attributeList;
+	}
+
+	/**
+	 * @author Dinesh
+	 * @return get values obtained from web service for Asset Types and
+	 *         attributes and populating the List object
+	 * @throws AssetPortalWSException
+	 */
+	public static List<AssetType> getValuesForAssetTypesList(
+			AssetManagerServicePortProxy webServiceAccess) {
+
+		// Calling WS to get AssetTypeList List
+		List<AssetType> assetTypeList = null;
+		try {
+			assetTypeList = webServiceAccess.getAssetType();
+		} catch (AssetPortalWSException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return assetTypeList;
+	}
+
+	public static JSONObject getCustomReport(
+			ReportManagerPortProxy webServiceAccessReport, String assetTypeId,
+			String[] attributesArray) {
+
+		final String METHOD_NAME = "getCustomReport";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		// FIXME
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084D"),
+				assetTypeId));
+
+		// looping through attribute array to get attribute Id's
+		List<Attribute> attributeList = new ArrayList<Attribute>();
+		for (String s : attributesArray) {
+			Attribute attribute = new Attribute();
+			attribute.setId(s);
+			attributeList.add(attribute);
+		}
+
+		ReportResults reportResults = null;
+		try {
+			// calling WS to get Report Data
+			// FIXME //ask service for all reports
+			reportResults = webServiceAccessReport.customReportRequest(
+					Integer.parseInt(assetTypeId), attributeList, 1, 50);
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084E"),
+					e.getMessage()));
+			return AMSJsonUtil.convertToErrorJson("Asset Not Available for the Selected Asset Type");
+		}
+		if (reportResults == null) {
+			//return error JSON
+			return AMSJsonUtil.convertToErrorJson("Asset Not Available for the Selected Asset Type");
+		}
+		List<ReportResultsList> reportResultsList = reportResults
+				.getReportResults();
+		JSONObject jsonObjectWrapper = AMSJsonUtil
+				.convertToReportDetails(reportResultsList);
+
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return jsonObjectWrapper;
+	}
+
+	public static JSONObject getFinanceReport(String assetType,
+			String depreciationType, String percentage,
+			ReportManagerPortProxy webServiceAccessReport) {
+
+		
+		
+		
+		return null;
+		
+	}
+	
+	public static ReportResults exportReport(
+			ReportManagerPortProxy webServiceReportManager, String reportType) {
+		ReportResults reportResults = null;
+		final String METHOD_NAME = "exportReport";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		int reportId = 1;
+
+		try {
+			// getting report types from WS
+			List<ReportType> reportTypeList = webServiceReportManager
+					.getReportType();
+			// setting report id to the user selected report
+			for (ReportType reportTypeLoopObject : reportTypeList) {
+				if (reportTypeLoopObject.getReportName().equalsIgnoreCase(
+						reportType)) {
+					reportId = reportTypeLoopObject.getReportId();
+				}
+			}
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW085E"),
+					e.getMessage()));
+		}
+
+		try {
+			// min row, max row is zero, to get all records
+			reportResults = webServiceReportManager.generateReport(0, 0,
+					reportId);
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW085E"),
+					e.getMessage()));
+		}
+		if (reportResults == null) {
+		}
+		List<ReportResultsList> reportResultsList = reportResults
+				.getReportResults();
+
+		// first row from service contains column names
+		ReportResultsList firstRowList = reportResultsList.get(0);
+		List<String> columnHeadings = firstRowList.getReportParameters();
+		List<String> formattedcolumnHeading = new ArrayList<String>();
+		// setting formatted headings for export file
+		for (String columnHeading : columnHeadings) {
+			formattedcolumnHeading.add(AMSNameUtil
+					.convertToLabelName(columnHeading));
+		}
+
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return reportResults;
+
+	}
+
+	public static AssetReport exportAssetHistoryReport(
+			ReportManagerPortProxy webServiceAccessReport) {
+		final String METHOD_NAME = "exportAssetHistoryReport";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+
+		AssetReport assetReport = null;
+		try {
+			//FIXME //change hardcoded values
+			assetReport = webServiceAccessReport
+					.getAssetHistory(
+							SortOrderEnum.ASC,
+							com.avnet.assetportal.webservice.reportmanager.SortColumnEnum.ASSET_ID,
+							1,
+							10,
+							com.avnet.assetportal.webservice.reportmanager.SearchTypeEnum.USER_ID,
+							"99999");
+
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW085E"),
+					e.getMessage()));
+		}
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return assetReport;
+	}
+
+	public static ReportResults exportCustomReport(
+			ReportManagerPortProxy webServiceAccessReport, String assetTypeId,
+			String[] attributesArray) {
+		final String METHOD_NAME = "downloadCustomReport";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		// FIXME
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084D"),
+				assetTypeId));
+
+		// looping through attribute array to get attribute Id's
+		List<Attribute> attributeList = new ArrayList<Attribute>();
+		for (String s : attributesArray) {
+			Attribute attribute = new Attribute();
+			attribute.setId(s);
+			attributeList.add(attribute);
+		}
+
+		ReportResults reportResults = null;
+		try {
+			// calling WS to get Report Data
+			// FIXME //ask service for all reports
+			reportResults = webServiceAccessReport.customReportRequest(
+					Integer.parseInt(assetTypeId), attributeList, 1, 50);
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084E"),
+					e.getMessage()));
+		}
+		if (reportResults == null) {
+			// FIXME
+		}
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return reportResults;
+	}
+
+	public static String saveCustomReportQuery(
+			ReportManagerPortProxy webServiceAccessReport, String assetTypeId,
+			String[] attributesArray, String queryName) {
+		final String METHOD_NAME = "saveCustomReport";
+		logger.entering(CLASS_NAME, METHOD_NAME);
+		// FIXME
+		logger.fine(MessageFormat.format(
+				LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW084D"),
+				assetTypeId+" "+ queryName));
+
+		// looping through attribute array to get attribute Id's
+		List<Attribute> attributeList = new ArrayList<Attribute>();
+		for (String s : attributesArray) {
+			Attribute attribute = new Attribute();
+			attribute.setId(s);
+			attributeList.add(attribute);
+		}
+
+		Acknowledgement acknowledgement = new Acknowledgement();;
+		try {
+			// calling WS to get Report Data
+			// FIXME //ask service for all reports
+			acknowledgement = webServiceAccessReport.saveQuery(assetTypeId, attributeList, queryName);
+		} catch (com.avnet.assetportal.webservice.reportmanager.AssetPortalWSException e) {
+			logger.severe(MessageFormat.format(
+					LoggerConstants.APP_CONSTANTS_BUNDLE.getString("AMSW086E"),
+					e.getMessage()));
+			return "error";
+		}
+		if(!acknowledgement.isFlag()){
+			//FIXME
+			logger.exiting(CLASS_NAME, METHOD_NAME);
+			return "error";
+		} 
+		logger.exiting(CLASS_NAME, METHOD_NAME);
+		return queryName+" successfully created";
+	}
+
+	public static String getLifeTimeForAssetType(
+			AssetManagerServicePortProxy webServiceAccess, String assetTypeId) {
+		String lifeTime = null;
+		try {
+			
+			 List <AssetType> assetTypeList = webServiceAccess.getAssetType();
+			 for (int i=0;i<assetTypeList.size();i++){
+				 if(assetTypeId.equals(assetTypeList.get(i).getAssetTypeId())){
+					 lifeTime = assetTypeList.get(i).getLifeTime();
+				 }
+			 }
+			
+		} catch (AssetPortalWSException e) {
+			e.printStackTrace();
+		}
+		return lifeTime;
+	}
+
+}

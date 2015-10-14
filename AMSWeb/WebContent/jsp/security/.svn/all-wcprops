@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 98
+/svn/ACE2014/!svn/ver/3088/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/security
+END
+header.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/ACE2014/!svn/ver/3088/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/security/header.jsp
+END
+securityHome.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/ACE2014/!svn/ver/3088/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/security/securityHome.jsp
+END
+securityLogin.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/ACE2014/!svn/ver/3088/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/security/securityLogin.jsp
+END

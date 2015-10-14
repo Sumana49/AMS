@@ -1,0 +1,319 @@
+.container {
+	width: 100%;
+	margin: 0 auto;
+}
+
+.historycontenttable {
+	width: 100%;
+	height: auto;
+}
+
+.historytable {
+	margin-left: 5%;
+	margin-right: 5%;
+	margin-bottom: 5%;
+}
+
+.alignLeft {
+	text-align: left;
+}
+
+#ui-datepicker-div {
+	width: 230px;
+}
+
+label.error {
+	padding: 5px;
+	color: red;
+	margin: 0px 0px 0px 42px;
+	text-align: left;
+	width: auto;
+	display: inline-block;
+}
+
+.notediv label.error {
+	margin-top: 19px;
+	display: inline-block;
+}
+
+.form {
+	margin-right: 10px;
+	margin-left: 20%;
+}
+
+.cleardiv {
+	display: inline-block;
+	margin-right: 50px;
+	margin-left: 101px;
+}
+
+.field {
+	width: 100%;
+	height: 12px;
+	padding-bottom: 35px;
+}
+
+input[type="text"].needed {
+	border: 1px solid red;
+}
+
+input[type="password"].needed {
+	border: 1px solid red;
+}
+
+input[type="select"].needed {
+	border: 1px solid red;
+}
+
+.tabcontainer {
+	width: 100%;
+}
+
+.value {
+	display: inline-block;
+	width: 150px;
+	white-space: pre-line;
+}
+
+.labelid {
+display: inline-block;
+width: 100px;
+margin-right: 40px;
+}
+
+.middle-content {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+.middle-content .left {
+	width: 48%;
+	padding-top: 10px;
+	padding-bottom: 10px;
+	display: inline-block;
+}
+
+.middle-content .right {
+	float: right;
+	display: inline-block;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.middle-content .info{
+	padding-top: 4px;
+	padding-bottom: 4px;
+	margin-left: 50px;
+}
+
+.head {
+	margin: 10px;
+}
+
+.foot {
+	display:block;
+	float:left;
+}
+
+.changeapproverlabel {
+	display: inline-block;
+	margin-right: 32px;
+	margin-left: 61px;
+}
+
+.changeapproverbtn {
+	display: inline-block;
+	margin-left: 25px;
+}
+
+.hide {
+	display: none;
+}
+
+textarea {
+	background-color: #fff;
+	background-image: none;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075) inset;
+	color: #555;
+	font-size: 1em;
+	line-height: 1.42857;
+	transition: border-color 0.15s ease-in-out 0s, box-shadow 0.15s
+		ease-in-out 0s;
+	display: inline-block;
+}
+
+.innertablecontainer {
+	text-align: left;
+}
+
+.selectfield {
+	width: 100%;
+	height: 20px;
+	padding-bottom: 25px;
+	margin-top: 0;
+}
+
+.notediv {
+	width: 100%;
+	margin-bottom: 15px;
+	height: 60px;
+}
+.namefield{
+	padding-top: 10px;
+	padding-bottom:25px;
+}
+
+.submitdiv {
+	display: inline-block;
+}
+
+.notefield {
+	padding-bottom: 10px;
+	height: 50%;
+	display: inline;
+}
+
+.alert-close {
+	color: #030303;
+	font-size: 1em;
+	text-decoration: none;
+	position: relative;
+	float: right;
+	top: -3;
+	cursor: pointer;
+}
+
+#notelabel {
+	display: inline-block;
+	position: absolute;
+	margin-top: 19px;
+}
+
+tbody tr td:first-child {
+	text-align: center;
+	cursor: pointer;
+}
+
+thead tr th:HOVER {
+	cursor: pointer;
+}
+
+.head h3 {
+	color: #cf000f;
+}
+
+.datatableError {
+	color: red;
+}
+
+#errmsgnote {
+	color: red;
+}
+
+#errmsgno_ofdays {
+	color: red;
+}
+
+#errmsg_eid {
+	color: red;
+}
+
+.leftfloat{
+	float:left;
+	diplay:inline-block;
+	text-align:left;
+}
+
+.rightfloat{
+	float:right;
+	diplay:inline-block;
+}
+
+.displayInlineBlock{
+	display:inline-block;
+}
+
+.commentlabel{
+position: absolute;
+}
+.requestcomment{
+display:inline-block;
+margin-left: 144;
+overflow-wrap: break-word;
+width: 420px;
+}
+.aHorizontalLine {
+padding: 10px;
+}
+#assetHistoryTable a:link {
+    color: #428bca;
+}
+
+#assetHistoryTable a:visited {
+    color: #428bca;
+}
+
+#assetHistoryTable a:hover {
+    color: #428bca;
+}
+
+#assetHistoryTable a:active {
+    color: #428bca;
+}
+
+.displayBlock{
+ display:block;
+ }
+ 
+div#errordiv {
+position: absolute;
+margin-left: 415px;
+}
+
+.dataTables_paginate.paging_input input{
+padding:1px;
+text-align:center;
+width:25px;
+display:inline;
+}
+
+
+#searchboxid{
+margin-left:30px; 
+width:400px;
+}
+
+#searchbuttonid{
+height:33px;
+}
+
+#resetbuttonid{
+height:33px;
+}
+
+.plusIconColor{
+ color:#428bca;
+ }
+ 
+ .invalid_eid {
+	color: red;
+}
+
+.searchedLabel {
+font-size: 1.2em;
+color: rgb(66, 139, 202);
+margin-left: 50px;
+margin-bottom: 12px;
+margin-top: -14px;
+}
+
+.searchedValue{
+color:black;
+}
+.changeApproverSelect{
+margin-left:60px;
+margin-top: 5px;
+}
+.

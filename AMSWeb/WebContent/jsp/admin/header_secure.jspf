@@ -1,0 +1,65 @@
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/admin/theme.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/admin/custom.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/Font.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/jquery-ui.theme.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/jquery-ui.theme.min.css">
+
+
+<script src="${pageContext.servletContext.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/select2.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/jquery.dataTables.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/admin/jquery-ui.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/jquery.validate.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/admin/custom.js"></script>
+
+<title>Home</title>
+</head>
+<body>
+	<div class="header">
+		<div class="logo-section">
+         	<div class="logo"> 
+            </div>
+            <div class="logotext">Asset Management</div>
+	    </div>
+	    
+	    <div class="menusection">
+
+			    <ul class="main-menu">
+			      <li id="home">
+			        <a href="home.do">
+				         <span class="micon icon-home2"></span>
+	                     <div class="icontext">Home</div>
+                     </a> 
+			      </li>
+			       <li id="assets">
+			        <a href="assets.do">
+				    	<span class="icon-stack micon"></span>
+				        <div class="icontext">Assets</div>
+			        </a>
+			       </li>
+			       <li id="reports">
+			       <a href="reports.do">
+				    	 <span class="icon-bars micon"></span>
+				    	 <div class="icontext">Reports</div>
+			       </a>
+			       </li>
+			       <li id="users">
+			       <a href="users.do">
+				    	<span class="icon-users micon"></span>
+				    	<div class="icontext">Users</div>
+			    	</a>
+			       </li>
+			   </ul>
+	   </div>
+	   <div class="user-info-section">
+	   		 <p> Welcome ${userDetails.firstName}</p>
+           <a class="logout"  href="Logout">
+              <span class="icon-exit"></span>Logout
+           </a>
+	   </div>
+	 
+	</div>

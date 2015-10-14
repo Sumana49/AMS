@@ -1,0 +1,120 @@
+/**
+
+Avnet Asset Tracking Application JavaScript
+Common JS Functionalities
+
+*/
+
+/* Alert Popup Script */
+
+function popupInfo(Info,alertType){
+	$("#ErrorFieldContent").removeClass();
+	$("#ErrorFieldContent").addClass('alert '+alertType);
+	$( "#ErrorFieldContent" ).hide();
+	$("#ErrorFieldContent").html(" <div class='alert-close' onclick='hideAlert();'>x</div>"+Info);
+	$( "#ErrorFieldContent" ).slideDown(400);
+	var body = $("html, body");
+	body.animate({scrollTop:0}, '500', 'swing', function() { 
+	  
+	});
+}
+function popupInfoFixed(Info,alertType){
+	$("#ErrorFieldContentFixed").removeClass();
+	$("#ErrorFieldContentFixed").addClass('alert '+alertType);
+	$( "#ErrorFieldContentFixed" ).hide();
+	$("#ErrorFieldContentFixed").html(" <div class='alert-close' onclick='hideAlert();'>x</div>"+Info);
+	$( "#ErrorFieldContentFixed" ).slideDown(400);
+}
+
+
+function hideAlert(){
+	$( "#ErrorFieldContent" ).slideUp(400);
+	$( "#ErrorFieldContentFixed" ).slideUp(500);
+	//$( "#ErrorFieldContent" ).hide();
+}
+
+function hideAlertFixed(){
+	$( "#ErrorFieldContentFixed" ).slideUp(500);
+	//$( "#ErrorFieldContent" ).hide();
+}
+
+$(document).ready(function() { 
+
+	/* Menu Active */
+	
+	var currentLocation = window.location.pathname.split("/")[3].split(".")[0];
+	$("#"+currentLocation).css('background-color',' #329AD6');
+	
+	/* Select2 Style Active */
+
+	try{
+		$("#reportType").select2(); 
+		$("#assertType").select2(); 
+		$("#assertId").select2(); 
+		$("#assetSelect").select2(); 
+		$("#assetType").select2();
+		$("#adminStates").select2(); 
+		$("#customSelectAssetType").select2({
+			width:200,
+			allowClear: true,
+			placeholder: "Select Asset Type"
+			
+		}); 
+		$("#customSelectAttributesList").select2({
+			width:350,
+			placeholder: "-- Attribute type --",
+			closeOnSelect:false
+		});
+		$("#financeAssetType").select2(); 
+		$("#depreciationType").select2();
+	}catch(e){
+		console.log("custom.js exception caught");
+	}
+	
+	
+	/* Sample Datatable */
+
+	$("#example").DataTable();
+
+	function reDraw($element) {
+		  var deferred = new $.Deferred();
+		  setTimeout(function() {
+		    var h = $element[0].offsetHeight;
+		    var s = $element[0].getComputedStyle;
+		    deferred.resolve();
+		  },0);
+		  return deferred.promise();
+	}
+
+	/* Inside Page Ajax Navigation */
+
+	$('#menu li ').click(function(){
+		hideAlert();
+		var toLoad = $(this).find('a').attr('href');
+		var currentContent = $( ".contentcontainer" ).find('.current').attr('id');
+		$('#menu li').removeClass('current-link-selected');
+		$(this).addClass('current-link-selected');
+		$('.contentsection').removeClass('current');
+		reDraw(toLoad).then(function() {
+		  $(toLoad).addClass('current');
+		
+		});
+		
+    });
+
+	/* Main Navigation Click */
+	
+	$('.main-menu li ').click(function(){
+		var toLoad = $(this).find('a').attr('href');
+		window.location.href=toLoad;
+    });
+	//handle datatable ERL warning
+	$.fn.dataTable.ext.errMode = 'throw';
+	//document ready close	
+});
+
+$('#closeChild').click(function(){
+	console.log("inside..");
+	$( "#ErrorFieldContentFixed" ).slideDown(500);
+});
+	

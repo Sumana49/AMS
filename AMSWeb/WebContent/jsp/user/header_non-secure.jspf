@@ -1,0 +1,35 @@
+
+
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/user/theme.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/user/custom.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/Font.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/jquery-ui.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/jquery-ui.theme.css">
+<link rel="stylesheet" type="text/css" href="${pageContext.servletContext.contextPath}/css/jquery-ui.theme.min.css">
+
+<script src="${pageContext.servletContext.contextPath}/js/jquery.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/jquery-ui.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/select2.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/jquery.validate.min.js"></script>
+<script src="${pageContext.servletContext.contextPath}/js/user/assetRequest.js"></script>
+
+<title>Home</title>
+</head>
+<body>
+	<div class="header">
+		<div class="logo-section">
+         	<div class="logo modifier"> 
+            </div>
+	    </div>
+	<form id="loginForm" method="post" action="j_security_check" >
+		   <div class="credentials">
+	   			 <input id="UsernameID"  name="j_username" type="text"  placeholder="Username"/>
+	    		 <input id="PasswordID"  name="j_password" type="password" placeholder="Password"/>
+	   			 <input id="LoginSubmitID" type="submit" class="btn btn-primary" value="Login"/>
+	    	</div>
+	    </form>
+	</div>

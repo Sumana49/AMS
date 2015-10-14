@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/ACE2014/!svn/ver/2388/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/delegate
+END
+AMSSecurityDelegate.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/ACE2014/!svn/ver/3054/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/delegate/AMSSecurityDelegate.java
+END
+AMSAdminDelegate.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/ACE2014/!svn/ver/3282/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/delegate/AMSAdminDelegate.java
+END
+AMSUserDelegate.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/ACE2014/!svn/ver/3250/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/delegate/AMSUserDelegate.java
+END

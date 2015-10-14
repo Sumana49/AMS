@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/controller
+END
+UserController.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/ACE2014/!svn/ver/3022/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/controller/UserController.java
+END
+SecurityController.java
+K 25
+svn:wc:ra_dav:version-url
+V 127
+/svn/ACE2014/!svn/ver/2838/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/controller/SecurityController.java
+END
+AdminController.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/ACE2014/!svn/ver/3161/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/controller/AdminController.java
+END

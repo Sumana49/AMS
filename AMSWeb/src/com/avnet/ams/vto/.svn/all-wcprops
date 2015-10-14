@@ -1,0 +1,221 @@
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/ACE2014/!svn/ver/2959/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto
+END
+ViewAssetsCountVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ViewAssetsCountVTO.java
+END
+ViewRequestsVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/ACE2014/!svn/ver/2787/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ViewRequestsVTO.java
+END
+AMSSecurityLogin.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/ACE2014/!svn/ver/1553/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AMSSecurityLogin.java
+END
+MonthlyPurchaseReports.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/ACE2014/!svn/ver/883/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/MonthlyPurchaseReports.java
+END
+AttributeAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/ACE2014/!svn/ver/2959/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AttributeAdapter.java
+END
+ResolveVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 112
+/svn/ACE2014/!svn/ver/3002/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ResolveVTO.java
+END
+EmpAutoCompleteDetails.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/ACE2014/!svn/ver/1230/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/EmpAutoCompleteDetails.java
+END
+AvailableAssetVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 119
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AvailableAssetVTO.java
+END
+ViewAsset.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/ACE2014/!svn/ver/882/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ViewAsset.java
+END
+EmployeeDetailsListVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/ACE2014/!svn/ver/2065/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/EmployeeDetailsListVTO.java
+END
+AssetTypeVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/ACE2014/!svn/ver/3161/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetTypeVTO.java
+END
+GetAssetsHistoryVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/ACE2014/!svn/ver/2346/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/GetAssetsHistoryVTO.java
+END
+EmployeeDetailsOwnedby.java
+K 25
+svn:wc:ra_dav:version-url
+V 124
+/svn/ACE2014/!svn/ver/2378/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/EmployeeDetailsOwnedby.java
+END
+AssetsHistoryVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/ACE2014/!svn/ver/2460/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetsHistoryVTO.java
+END
+AddAssetVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/ACE2014/!svn/ver/2333/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AddAssetVTO.java
+END
+ManageAssetVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/ACE2014/!svn/ver/3210/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ManageAssetVTO.java
+END
+ErrorVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 110
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ErrorVTO.java
+END
+AttributesList.java
+K 25
+svn:wc:ra_dav:version-url
+V 116
+/svn/ACE2014/!svn/ver/2065/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AttributesList.java
+END
+GetAssetsHistoryVTOCount.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/ACE2014/!svn/ver/2555/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/GetAssetsHistoryVTOCount.java
+END
+GetAssetsHistoryCountVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/ACE2014/!svn/ver/2348/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/GetAssetsHistoryCountVTO.java
+END
+AssetRequestHisory.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/ACE2014/!svn/ver/1187/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetRequestHisory.java
+END
+AssetsHistoryCountVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/ACE2014/!svn/ver/2406/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetsHistoryCountVTO.java
+END
+AssetApprover.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/ACE2014/!svn/ver/2065/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetApprover.java
+END
+ViewAssetsAdminVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 120
+/svn/ACE2014/!svn/ver/2557/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ViewAssetsAdminVTO.java
+END
+ViewReportVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ViewReportVTO.java
+END
+WarrantyReport.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/ACE2014/!svn/ver/940/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/WarrantyReport.java
+END
+AttributeType.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/ACE2014/!svn/ver/3018/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AttributeType.java
+END
+AssetHistoryDetails.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/ACE2014/!svn/ver/2185/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetHistoryDetails.java
+END
+AssetTypeList.java
+K 25
+svn:wc:ra_dav:version-url
+V 115
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetTypeList.java
+END
+EmployeeDetailsClientVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/ACE2014/!svn/ver/2065/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/EmployeeDetailsClientVTO.java
+END
+EditAssetVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/ACE2014/!svn/ver/2549/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/EditAssetVTO.java
+END
+AssetTypeAdapter.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/ACE2014/!svn/ver/3009/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetTypeAdapter.java
+END
+EmployeeDetails.java
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/ACE2014/!svn/ver/2345/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/EmployeeDetails.java
+END
+ViewRequestCountVTO.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/ViewRequestCountVTO.java
+END
+AssetRequest.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/ACE2014/!svn/ver/922/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetRequest.java
+END
+AssetSecurityHistory.java
+K 25
+svn:wc:ra_dav:version-url
+V 122
+/svn/ACE2014/!svn/ver/3084/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/vto/AssetSecurityHistory.java
+END

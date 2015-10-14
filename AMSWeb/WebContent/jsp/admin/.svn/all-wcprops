@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/ACE2014/!svn/ver/3078/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin
+END
+header_secure.jspf
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/ACE2014/!svn/ver/3182/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/header_secure.jspf
+END
+edit.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/ACE2014/!svn/ver/3278/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/edit.jsp
+END
+index.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/ACE2014/!svn/ver/2060/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/index.jsp
+END
+help.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/ACE2014/!svn/ver/2657/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/help.jsp
+END
+home.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 104
+/svn/ACE2014/!svn/ver/3222/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/home.jsp
+END
+login.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/ACE2014/!svn/ver/2060/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/login.jsp
+END
+viewreports.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 111
+/svn/ACE2014/!svn/ver/3103/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/viewreports.jsp
+END
+viewasset.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/ACE2014/!svn/ver/2533/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/viewasset.jsp
+END
+header_non-secure.jspf
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/ACE2014/!svn/ver/2485/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/header_non-secure.jspf
+END
+reports.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 107
+/svn/ACE2014/!svn/ver/3193/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/reports.jsp
+END
+sample_table.jspf
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/ACE2014/!svn/ver/2060/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/sample_table.jspf
+END
+sample.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/ACE2014/!svn/ver/2060/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/sample.jsp
+END
+users.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 105
+/svn/ACE2014/!svn/ver/3225/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/users.jsp
+END
+assets.jsp
+K 25
+svn:wc:ra_dav:version-url
+V 106
+/svn/ACE2014/!svn/ver/3211/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/jsp/admin/assets.jsp
+END

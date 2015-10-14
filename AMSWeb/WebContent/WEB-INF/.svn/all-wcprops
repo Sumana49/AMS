@@ -1,0 +1,35 @@
+K 25
+svn:wc:ra_dav:version-url
+V 93
+/svn/ACE2014/!svn/ver/2386/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/WEB-INF
+END
+ibm-web-ext.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/ACE2014/!svn/ver/2054/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/WEB-INF/ibm-web-ext.xml
+END
+ibm-web-bnd.xml
+K 25
+svn:wc:ra_dav:version-url
+V 109
+/svn/ACE2014/!svn/ver/2304/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/WEB-INF/ibm-web-bnd.xml
+END
+spring-dispatcher-servlet.xml
+K 25
+svn:wc:ra_dav:version-url
+V 123
+/svn/ACE2014/!svn/ver/2182/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/WEB-INF/spring-dispatcher-servlet.xml
+END
+views.xml
+K 25
+svn:wc:ra_dav:version-url
+V 103
+/svn/ACE2014/!svn/ver/2386/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/WEB-INF/views.xml
+END
+web.xml
+K 25
+svn:wc:ra_dav:version-url
+V 101
+/svn/ACE2014/!svn/ver/2551/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/WebContent/WEB-INF/web.xml
+END

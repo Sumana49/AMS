@@ -1,0 +1,357 @@
+.container {
+	width: 100%;
+}
+label{
+	 display:inline-block;
+}
+* {
+	margin: 0 auto;
+	padding: 0;
+}
+
+.left {
+	width: 23%;
+	float: left;
+	background: #212427;
+	height: 660px;
+}
+#err {
+	margin-top: 10px;
+	position: absolute;
+	color: red;
+	padding-left: 20px;
+}
+
+.logocontainer {
+	margin-top: 100%;
+}
+
+.logocontainer1 {
+	margin-top: 10%;
+}
+
+.logo1 {
+	background: url('../../images/avnet-logo.png');
+	background-position: top left;
+	background-size: 90% 100%;
+	background-repeat: no-repeat;
+	width: 100%;
+	height: 4em;
+}
+
+.photocontainer {
+	width: 50%;
+	margin: 0 auto;
+	margin-top: 40%;
+	text-align: center;
+	color: #fff;
+	font-size: 4.5em;
+	vertical-align: middle;
+}
+label.error{
+ color:red;
+ margin-left:20px;
+ text-align:left;
+ margin-top:15px;
+ position:absolute;
+
+}
+
+.empdetails {
+	margin-top: 10%;
+	font-size: 2em;
+	color: #fff;
+	text-align: center;
+}
+
+.namecontainer {
+	margin-top: 5px;
+}
+
+.right {
+	width: 77%;
+	height: 660px;
+	float: right;
+}
+
+.sech1 {
+	display: inline;
+	width: 100%;
+}
+
+.securehead {
+	display: inline-block;
+	padding-top: 0;
+	font-size: 2.3em;
+	color: #444b52;
+	padding: 45px 15px 10px;
+}
+
+.securehead1 {
+	display: inline-block;
+	font-size: 2em;
+	color: #444b52;
+	background: #eceff2;
+	padding: 45px 15px 10px;
+	width:97%;
+}
+
+#EmpID {
+	width: 250px;
+}
+
+.securemiddle {
+	height: 79%;
+	width: 100%;
+	background: white;
+	text-align: center;
+}
+
+.secureform {
+	margin: 0 auto;
+	width: 50%;
+	padding-top: 15%;
+}
+
+.buttoncontainer {
+	margin-left: 0px;
+	margin-top: 10%;
+	width: 50%;
+	display: inline-block;
+}
+
+.formfooter {
+	height: 5%;
+	width:80%;
+	padding-top: 15px;
+	text-align: center;
+	background: #fff;
+	position: fixed;
+    bottom: 0;
+}
+
+form {
+	width: auto;
+}
+
+.sectab {
+	padding-top: 7%;
+}
+
+.alert-close {
+	color: #030303;
+	font-size: 1em;
+	text-decoration: none;
+	position: relative;
+	float: right;
+	top: -3;
+	cursor: pointer;
+}
+.alert-success{
+	color: #3c763d;
+	background-color: #dff0d8;
+	border-color: #d6e9c6;
+}
+
+.CSSTableGenerator {
+	border: 1px solid #eceff2;
+	border-radius: 5px;
+	margin: 0 auto;
+	padding: 0;
+	width: 70%;
+}
+
+.CSSTableGenerator table {
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.CSSTableGenerator tr:last-child td:last-child {
+	border-bottom-right-radius: 5px;
+}
+
+.CSSTableGenerator table tr:first-child td:first-child {
+	border-top-left-radius: 5px;
+}
+
+.CSSTableGenerator table tr:first-child td:last-child {
+	border-top-right-radius: 5px;
+}
+
+.CSSTableGenerator tr:last-child td:first-child {
+	border-bottom-left-radius: 5px;
+}
+
+.CSSTableGenerator tr:hover td {
+	background-color: #f9fbfc;
+}
+
+.CSSTableGenerator td {
+	-moz-border-bottom-colors: none;
+	-moz-border-left-colors: none;
+	-moz-border-right-colors: none;
+	-moz-border-top-colors: none;
+	background-color: #ffffff;
+	border-color: #eceff2;
+	border-image: none;
+	border-style: solid;
+	border-width: 0 1px 1px 0;
+	color: #3f474d;
+	font-family: Arial;
+	font-size: .9em;
+	font-weight: bold;
+	padding: 12px;
+	text-align: left;
+	vertical-align: middle;
+}
+
+.CSSTableGenerator tr:last-child td {
+	border-width: 0 1px 0 0;
+}
+
+.CSSTableGenerator tr td:last-child {
+	border-width: 0 0 1px;
+}
+
+.CSSTableGenerator tr:last-child td:last-child {
+	border-width: 0;
+}
+
+.CSSTableGenerator thead tr:first-child td {
+	background: -o-linear-gradient(bottom, #ff5656 5%, #7f0000 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ff5656
+		), color-stop(1, #7f0000) );
+	background: -moz-linear-gradient(center top, #ff5656 5%, #7f0000 100%);
+	filter: progid :     DXImageTransform.Microsoft.gradient (    
+		startColorstr =  
+		  "#ff5656", endColorstr =     "#7f0000" );
+	background: -o-linear-gradient(top, #ff5656, 7f0000);
+	background-color: #ff5656;
+	border: 0px solid #eceff2;
+	text-align: center;
+	width:33.33%;
+	border-width: 0px 0px 1px 1px;
+	font-size: .9em;
+	font-weight: bold;
+	color: #ffffff;
+}
+
+.CSSTableGenerator thead tr:first-child:hover td {
+	background: -moz-linear-gradient(center top, #ff5656 5%, #7f0000 100%)
+		repeat scroll 0 0 #ff5656;
+}
+
+.CSSTableGenerator tr:first-child td:first-child {
+	border-width: 0 0 1px;
+}
+
+.flagyes {
+	color: green;
+	font-size: 2em;
+}
+
+.flagno {
+	color: red;
+	font-size: 2em;
+}
+td.aligncenter{
+	text-align:center;
+}
+
+.CSSTableGenerator tr:first-child td:last-child {
+	border-width: 0 0 1px 1px;
+}
+
+td.highlightyes {
+    	color:black;
+        background:#82FA58;
+    }
+    
+td.highlightno {
+    	color:black;
+        background:#FE2E2E;
+    }
+
+@media screen and (max-width:830px){
+	.CSSTableGenerator {
+		width: 98%;
+	}
+	.left {
+		width: 100%;
+		height: auto;
+	}
+	.alert{
+	   width:65%;
+	}
+	.logocontainer1 {
+		margin-top: 0;
+		margin-left: 0;
+		border-bottom: 1px solid #fff;
+		padding-bottom: 10px;
+	}
+	.securehead1 {
+		font-size: 1.5em;
+		color: #444b52;
+		background: #eceff2;
+		padding: 20px 0px 2px;
+		width: 100%;
+	}
+	.logo1 {
+		width: 50%;
+		height: 4em;
+		margin-left: 25%;
+		margin-right: 10%;
+	}
+	.photocontainer {
+		margin: 5%;
+		margin-bottom: -10px;
+		width: 15%;
+		display: inline-block;
+		margin: -45px 5% 0px;
+	}
+	.empdetails {
+		width:auto;
+		font-size: 1.3em;
+		color: #fff;
+		text-align: left;
+		display: inline-block;
+		margin-bottom: 2%;
+		margin-top: 10px;
+		min-height: 50px;
+	}
+	.right {
+		width: 100%;
+		height: 100%;
+		background: white
+	}
+	.securemiddle {
+		width: 100%;
+		background: white;
+		text-align: center;
+	}
+	.formfooter {
+		height: 8%;
+		width:100%;
+		text-align: center;
+		background: #fff;
+		padding-top: 15px;
+	}
+	.sectab {
+		padding-top: 5%;
+		padding-bottom: 5%;
+	}
+}
+
+@media screen and (max-width: 350px){
+.photocontainer {
+		display:none;
+	}
+
+}
+.dataTables_paginate.paging_input input{
+padding:1px;
+text-align:center;
+width:25px;
+display:inline;
+}

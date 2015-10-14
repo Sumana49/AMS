@@ -1,0 +1,59 @@
+K 25
+svn:wc:ra_dav:version-url
+V 97
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util
+END
+AMSNameUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/ACE2014/!svn/ver/2387/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AMSNameUtil.java
+END
+AcknowledgementJsonUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 126
+/svn/ACE2014/!svn/ver/3109/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AcknowledgementJsonUtil.java
+END
+AMSREPUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 113
+/svn/ACE2014/!svn/ver/2377/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AMSREPUtil.java
+END
+WASGroupsExtractor.java
+K 25
+svn:wc:ra_dav:version-url
+V 121
+/svn/ACE2014/!svn/ver/2377/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/WASGroupsExtractor.java
+END
+AMSUserJsonUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 118
+/svn/ACE2014/!svn/ver/2517/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AMSUserJsonUtil.java
+END
+AMSJsonUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/ACE2014/!svn/ver/3216/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AMSJsonUtil.java
+END
+AMSWebServiceReflectionUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 130
+/svn/ACE2014/!svn/ver/3020/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AMSWebServiceReflectionUtil.java
+END
+Endpoint.properties
+K 25
+svn:wc:ra_dav:version-url
+V 117
+/svn/ACE2014/!svn/ver/2377/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/Endpoint.properties
+END
+AMSDateUtil.java
+K 25
+svn:wc:ra_dav:version-url
+V 114
+/svn/ACE2014/!svn/ver/2778/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams/util/AMSDateUtil.java
+END

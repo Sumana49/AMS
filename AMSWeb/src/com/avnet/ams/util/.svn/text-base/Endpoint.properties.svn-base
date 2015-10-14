@@ -1,0 +1,5 @@
+com.avnet.assetportal.webservice.assetservice.AssetManagerServicePortProxy:/AMSWebServices/AssetManagerService?wsdl;
+com.avnet.assetportal.webservice.usermanager.UserManagerPortProxy:/AMSWebServices/UserManagerService?wsdl;
+com.avnet.assetportal.webservice.request.RequestManagerPortProxy:/AMSWebServices/UserRequestManagerService?wsdl;
+com.avnet.assetportal.webservice.mail.MailServiceManagerSOAPProxy:/AMSWebServices/MailServiceManager?.wsdl;
+com.avnet.assetportal.webservice.reportmanager.ReportManagerPortProxy:/AMSWebServices/ReportManagerService?wsdl;

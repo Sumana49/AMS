@@ -1,0 +1,55 @@
+10
+
+dir
+2388
+https://192.168.210.39/svn/ACE2014/AvnetAssetTrackingApplication/trunk/AMSAdminWeb/src/com/avnet/ams
+https://192.168.210.39/svn/ACE2014
+
+
+
+2014-08-18T04:31:38.662823Z
+2388
+dineshpandiyan
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+dc1a7eab-175c-684b-919c-93cdbebc376c
+
+controller
+dir
+
+rep
+dir
+
+admin
+dir
+
+login
+dir
+
+vto
+dir
+
+reportviews
+dir
+
+delegate
+dir
+
+constants
+dir
+
+util
+dir
+
